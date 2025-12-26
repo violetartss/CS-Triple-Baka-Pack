@@ -17,7 +17,7 @@ smlua_audio_utils_replace_sequence(SEQ_MIKU_METAL, 0x18, 80, "MikuMetal")
 
 local function on_mikuseqload(player, seqID)
     audio_stream_stop(SEQ_MIKUNEW_CREDITS)
-    -- subtitleTimer = -1
+    subtitleTimer = -1
 
     local charNum = _G.charSelect.character_get_current_number()
     if charNum == CT_MIKU or charNum == CT_TETO or charNum == CT_NERU then

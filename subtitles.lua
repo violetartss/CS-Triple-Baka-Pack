@@ -99,7 +99,7 @@ local sCreditsTable = {
     LYRIC("Agent X: The Great Subtitler", COLOR_ORANGE, 178.00, 182.50)
 }
 
-subtitleTimer = 135*30
+subtitleTimer = -1
 
 --- @param message string
 --- @param x number
