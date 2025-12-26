@@ -32,65 +32,65 @@ end
 local sLyricsTable = {
     LYRIC("Yahoo!!!", COLOR_WHITE, 7.25, 8.25),
 
-    LYRIC("Jump, jump, jump up!", COLOR_CYAN, 19.50, 20.50),
+    LYRIC("Jump, Jump, Jump UP!!!", COLOR_CYAN, 19.50, 20.50),
     LYRIC("All the way up to the sky", COLOR_CYAN, 20.50, 21.75),
-    LYRIC("Seems so far but you'll make it if you try", COLOR_CYAN, 21.75, 25.10),
+    LYRIC("Seems so far but you'll make it if you try!", COLOR_CYAN, 21.75, 25.10),
     LYRIC("Reach for the stars shining so bright", COLOR_CYAN, 25.10, 27.50),
-    LYRIC("Go so far and see every single sight", COLOR_CYAN, 27.50, 30.75),
-    LYRIC("Jump, jump, jump up!", COLOR_CYAN, 30.75, 31.50),
+    LYRIC("Go so far and see every single sight!", COLOR_CYAN, 27.50, 30.75),
+    LYRIC("Jump, Jump, Jump UP!!!", COLOR_CYAN, 30.75, 31.50),
     LYRIC("All the way up to the moon", COLOR_CYAN, 31.50, 33.00),
-    LYRIC("So high up, see how far you can go", COLOR_CYAN, 33.00, 36.00),
+    LYRIC("So high up, see how far you can go!", COLOR_CYAN, 33.00, 36.00),
     LYRIC("Reach for the stars shining so bright", COLOR_CYAN, 36.00, 38.60),
     LYRIC("An adventure is waiting for you!", COLOR_CYAN, 38.60, 41.75),
 
     LYRIC("Step into the frame, I won't be afraid", COLOR_RED, 41.75, 47.40),
-    LYRIC("Shining stars and secrets call my name", COLOR_RED, 47.40, 53.00),
+    LYRIC("Shining stars and secrets call my name!", COLOR_RED, 47.40, 53.00),
 
     LYRIC("Shine above the skies, I will chase the light", COLOR_WHITE, 53.00, 55.30),
-    LYRIC("Every jump I reach so high, through the day and the night", COLOR_WHITE, 55.30, 58.50),
+    LYRIC("Every jump I reach so high, through the day and the night!", COLOR_WHITE, 55.30, 58.50),
     LYRIC("Go out and see the world, you can shine so bright", COLOR_WHITE, 58.50, 61.00),
-    LYRIC("We'll give it all we got, chasing dreams with all our might", COLOR_WHITE, 61.00, 64.00),
+    LYRIC("We'll give it all we got, chasing dreams with all our might!", COLOR_WHITE, 61.00, 64.00),
 
     LYRIC("Jump jump so far!", COLOR_CYAN, 75.00, 76.30),
     LYRIC("You'll find a new galaxy", COLOR_CYAN, 76.30, 77.75),
-    LYRIC("Leave your mark, make all new discoveries", COLOR_CYAN, 77.75, 80.75),
+    LYRIC("Leave your mark, make all new discoveries!", COLOR_CYAN, 77.75, 80.75),
     LYRIC("Beyond the stars shining so bright", COLOR_CYAN, 80.75, 83.25),
     LYRIC("An adventure is waiting for you!", COLOR_CYAN, 83.25, 86.50),
 
     LYRIC("Every star I hold, it becomes my guide", COLOR_RED, 86.50, 91.75),
-    LYRIC("Chasing the light, drawing close in sight", COLOR_RED, 91.75, 97.50),
+    LYRIC("Chasing the light, drawing close in sight!", COLOR_RED, 91.75, 97.50),
 
     LYRIC("Shine above the skies, I will chase the light", COLOR_WHITE, 97.50, 100.00),
-    LYRIC("Every jump I reach so high, through the day and the night", COLOR_WHITE, 100.00, 103.25),
+    LYRIC("Every jump I reach so high, through the day and the night!", COLOR_WHITE, 100.00, 103.25),
     LYRIC("Go out and see the world, you can shine so bright", COLOR_WHITE, 103.25, 105.75),
-    LYRIC("So we'll give it all we got, chasing dreams with all our might", COLOR_WHITE, 105.75, 108.75),
+    LYRIC("So we'll give it all we got, chasing dreams with all our might!", COLOR_WHITE, 105.75, 108.75),
 
     LYRIC("Shine above the skies, I will chase the light", COLOR_WHITE, 108.75, 111.40),
-    LYRIC("Every jump I reach so high, through the day and the night", COLOR_WHITE, 111.40, 114.25),
+    LYRIC("Every jump I reach so high, through the day and the night!", COLOR_WHITE, 111.40, 114.25),
     LYRIC("Go out and see the world, you can shine so bright", COLOR_WHITE, 114.25, 116.75),
-    LYRIC("So we'll see this to the end, reaching for our toughest fight", COLOR_WHITE, 116.75, 121.00),
+    LYRIC("So we'll see this to the end, reaching for our toughest fight!", COLOR_WHITE, 116.75, 121.00),
 
     LYRIC("Here we go!!!", COLOR_WHITE, 135.00, 137.00),
 
     LYRIC("If I keep leaping throughout the unknown,", COLOR_RED, 147.75, 153.50),
-    LYRIC("I'll shape a story that is my own", COLOR_RED, 153.50, 159.00),
+    LYRIC("I'll shape a story that is my own!", COLOR_RED, 153.50, 159.00),
 
     LYRIC("Shine above the skies, I will chase the light", COLOR_WHITE, 159.00, 161.50),
-    LYRIC("Every jump I reach so high, through the day and the night", COLOR_WHITE, 161.50, 164.50),
+    LYRIC("Every jump I reach so high, through the day and the night!", COLOR_WHITE, 161.50, 164.50),
     LYRIC("Go out and see the world, you can shine so bright", COLOR_WHITE, 164.50, 167.00),
-    LYRIC("So we'll give it all we got, chasing dreams with all our might", COLOR_WHITE, 167.00, 170.00),
+    LYRIC("So we'll give it all we got, chasing dreams with all our might!", COLOR_WHITE, 167.00, 170.00),
 
     LYRIC("Shine above the skies, I will chase the light", COLOR_WHITE, 170.00, 172.50),
-    LYRIC("Every jump I reach so high, through the day and the night", COLOR_WHITE, 172.50, 175.80),
+    LYRIC("Every jump I reach so high, through the day and the night!", COLOR_WHITE, 172.50, 175.80),
     LYRIC("Go out and see the world, you can shine so bright", COLOR_WHITE, 175.80, 178.25),
-    LYRIC("So we'll see this to the end, nothing's gonna stop our flight", COLOR_WHITE, 178.25, 182.50),
+    LYRIC("So we'll see this to the end, nothing's gonna stop our flight!", COLOR_WHITE, 178.25, 182.50),
 }
 
 --- @type XSubtitle[]
 local sCreditsTable = {
     LYRIC("Violet: Pack Creator / Modeler / Animator", COLOR_PURPLE, 138.00, 143.00),
     LYRIC("Chalz: Musician", COLOR_CYAN, 143.00, 148.00),
-    LYRIC("wibblus: Hair Physics", COLOR_GREEN, 148.00, 153.00),
+    LYRIC("wibblus: Hair Physics / Programmer", COLOR_GREEN, 148.00, 153.00),
     LYRIC("Baconator2558: Programmer", COLOR_ORANGE, 153.00, 158.00),
     LYRIC("ManIsCat2: Music / Dialog Programmer", COLOR_WHITE, 158.00, 163.00),
     LYRIC("Zam Boni: Animator", COLOR_GREEN, 163.00, 168.00),
