@@ -920,8 +920,7 @@ local function on_character_select_load()
         COSTUMETABLE_MIKU[1].model,                                                                                                                                                  -- Character Model
         CT_MARIO,                                                                                                                                                                    -- Override Character
         TEX_MIKU_ICON,                                                                                                                                                               -- Life Icon
-        1,                                                                                                                                                                           -- Camera Scale
-        0                                                                                                                                                                            -- Vertical Offset
+        1                                                                                                                                                                            -- Camera Scale
     )
     for i = 1, #COSTUMETABLE_MIKU do
         local costume = COSTUMETABLE_MIKU[i]
@@ -935,8 +934,8 @@ local function on_character_select_load()
             _G.charSelect.character_add_palette_preset(costume.model, palette, palette.name)
         end
         _G.charSelect.character_add_costume_health_meter(CT_MIKU, i, HEALTH_METER_MIKU)
-        _G.init_physbone(costume.model, 0, 0.4, 0.5, 30)
-        _G.init_physbone(costume.model, 1, 0.4, 0.5, 30)
+        init_physbone(costume.model, 0, 0.4, 0.5, 30)
+        init_physbone(costume.model, 1, 0.4, 0.5, 30)
 
         if costume.defaultAnims then
             CLASSIC_MODELS[costume.model] = true
@@ -953,8 +952,7 @@ local function on_character_select_load()
         COSTUMETABLE_TETO[1].model,                                                                                                              -- Character Model
         CT_MARIO,                                                                                                                                -- Override Character
         TEX_TETO_ICON,                                                                                                                           -- Life Icon
-        1,                                                                                                                                       -- Camera Scale
-        0                                                                                                                                        -- Vertical Offset
+        1                                                                                                                                        -- Camera Scale
     )
     for i = 1, #COSTUMETABLE_TETO do
         local costume = COSTUMETABLE_TETO[i]
@@ -968,8 +966,8 @@ local function on_character_select_load()
             _G.charSelect.character_add_palette_preset(costume.model, palette, palette.name)
         end
         _G.charSelect.character_add_costume_health_meter(CT_TETO, i, HEALTH_METER_TETO)
-        _G.init_physbone(costume.model, 0, 0.4, 0.5, 24)
-        _G.init_physbone(costume.model, 1, 0.4, 0.5, 24)
+        init_physbone(costume.model, 0, 0.4, 0.5, 24)
+        init_physbone(costume.model, 1, 0.4, 0.5, 24)
 
         if costume.defaultAnims then
             CLASSIC_MODELS[costume.model] = true
@@ -986,8 +984,7 @@ local function on_character_select_load()
         COSTUMETABLE_NERU[1].model,                                                                                                                                                                 -- Character Model
         CT_MARIO,                                                                                                                                                                                   -- Override Character
         TEX_NERU_ICON,                                                                                                                                                                              -- Life Icon
-        1,                                                                                                                                                                                          -- Camera Scale
-        0                                                                                                                                                                                           -- Vertical Offset
+        1                                                                                                                                                                                           -- Camera Scale
     )
     for i = 1, #COSTUMETABLE_NERU do
         local costume = COSTUMETABLE_NERU[i]
@@ -1001,7 +998,7 @@ local function on_character_select_load()
             _G.charSelect.character_add_palette_preset(costume.model, palette, palette.name)
         end
         _G.charSelect.character_add_costume_health_meter(CT_NERU, i, HEALTH_METER_MIKU)
-        _G.init_physbone(costume.model, 1, 0.4, 0.5, 30)
+        init_physbone(costume.model, 1, 0.4, 0.5, 30)
 
         if costume.defaultAnims then
             CLASSIC_MODELS[costume.model] = true
@@ -1009,6 +1006,12 @@ local function on_character_select_load()
     end
 
     --
+
+    add_emote('MikuCS', "Leek Spin", TEX_MIKU_ICON, nil, { CT_MIKU })
+    add_emote('MikuCS', "Leek Spin 2", nil, nil, { CT_MIKU })
+    add_emote('MikuCS', "Leek Spin 3", nil, nil, { CT_MIKU })
+    add_emote('MikuCS', "Leek Spin 4", nil, nil, { CT_MIKU })
+    add_emote('MikuCS', "Leek Spin 5", nil, nil, { CT_MIKU })
 
     enable_custom_animations()
 
