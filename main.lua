@@ -1010,8 +1010,8 @@ local function on_character_select_load()
     add_emote('MikuCS', "Leek Spin", TEX_MIKU_ICON, nil, { CT_MIKU })
     add_emote('MikuCS', "Leek Spin 2", nil, nil, { CT_MIKU })
     add_emote('MikuCS', "Leek Spin 3", nil, nil, { CT_MIKU })
-    add_emote('MikuCS', "Leek Spin 4", nil, nil, { CT_MIKU })
-    add_emote('MikuCS', "Leek Spin 5", nil, nil, { CT_MIKU })
+    --add_emote('MikuCS', "Leek Spin 4", nil, nil, { CT_MIKU })
+    --add_emote('MikuCS', "Leek Spin 5", nil, nil, { CT_MIKU })
 
     enable_custom_animations()
 

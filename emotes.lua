@@ -40,10 +40,12 @@ local emoteTable = {}
 local emoteMenu = {
     open = false,
     selected = 1,
+    cursorAngle = 0.0,
     availableEmotes = {} -- updated on emote wheel open
 }
 
-local ICON_DEFAULT = get_texture_info('emote_icon_default')
+local TEX_ICON_DEFAULT = get_texture_info('emote_icon_default')
+local TEX_WHEEL_SIMPLE = get_texture_info('emote_wheel_simple')
 
 ---@param luaAnimId string
 ---@param name? string
@@ -79,6 +81,7 @@ local function act_emoting(m)
 
     if emote.func then if emote.func(m, animInfo.animFrame) then return end end
 
+    m.input = m.input & ~INPUT_NONZERO_ANALOG
     if check_common_idle_cancels(m) ~= 0 then
         return 1
     end
@@ -106,10 +109,10 @@ local function before_mario_update(m)
 
     if emoteMenu.open then
         local numEmotes = #emoteMenu.availableEmotes
-        if c.stickMag > 0.1 then
-            local stickAngle = wrapf(atan(c.stickY, c.stickX), PI_2)
-            _G.quick_debug_log('stick', stickAngle)
-            emoteMenu.selected = wrap(round((stickAngle / PI_2) * numEmotes), numEmotes)
+        if c.stickMag > 0.25 then
+            emoteMenu.cursorAngle = wrapf(atan(c.stickX, -c.stickY), PI_2)
+            --_G.quick_debug_log('stick', emoteMenu.cursorAngle)
+            emoteMenu.selected = wrap(round((emoteMenu.cursorAngle / PI_2) * numEmotes), numEmotes)
             c.stickMag = 0.0
         end
 
@@ -156,13 +159,16 @@ local function on_hud_render()
     local numEmotes = #emoteMenu.availableEmotes
     local angleDiff = PI_2 / numEmotes
 
+    djui_hud_set_color(0xFF, 0xFF, 0xFF, 0xFF)
+    djui_hud_render_texture(TEX_WHEEL_SIMPLE, w - 256, h - 256, 2.0, 2.0)
+
     local curAngle = angleDiff
     for i = 1, numEmotes do
         local emote = emoteTable[emoteMenu.availableEmotes[i]]
 
         local x = w + sin(curAngle) * 200
         local y = h + cos(curAngle) * 200
-        local icon = emote.icon or ICON_DEFAULT
+        local icon = emote.icon or TEX_ICON_DEFAULT
 
         djui_hud_set_color(0xFF, 0xFF, 0xFF, emoteMenu.selected == i and 0xFF or 0x7F)
 
@@ -171,7 +177,9 @@ local function on_hud_render()
     end
     djui_hud_set_color(0xFF, 0xFF, 0xFF, 0xFF)
 
+    
+
     local selectedName = emoteTable[emoteMenu.availableEmotes[emoteMenu.selected]].name
-    djui_hud_print_text(selectedName, w - djui_hud_measure_text(selectedName), h + 250, 2.0)
+    djui_hud_print_text(selectedName, w - djui_hud_measure_text(selectedName), h - 16, 2.0)
 end
 hook_event(HOOK_ON_HUD_RENDER, on_hud_render)
