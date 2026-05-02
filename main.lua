@@ -1041,8 +1041,10 @@ local function on_character_select_load()
         [28] = MARIO_EYES_LOOK_RIGHT,
         [38] = MARIO_EYES_LOOK_LEFT,
         [50] = MARIO_EYES_BLINK,
-        [160] = MARIO_EYES_LOOK_DOWN,
-        [250] = MARIO_EYES_BLINK,
+        [200] = 12,
+        [215] = MARIO_EYES_BLINK,
+        [395] = MARIO_EYES_CLOSED,
+        [410] = MARIO_EYES_BLINK,
     }
     add_emote('e_birdbrain', "Birdbrain", nil, nil, { CT_TETO }, function (m, curFrame)
         emoteHandState = HANDS_BIRDBRAIN[curFrame] or emoteHandState
