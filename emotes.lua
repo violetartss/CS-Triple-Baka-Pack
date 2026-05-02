@@ -2,7 +2,7 @@ local PI, PI_2 = math.pi, math.pi * 2.0
 local table_insert, round, atan, sin, cos = table.insert, math.round, math.atan, math.sin, math.cos
 
 ---@param n integer
----@param range integer
+---@param range integer girlie do NOT pass a range of 0
 ---@return integer
 local function wrap(n, range)
     while n < 1 do
@@ -109,21 +109,22 @@ local function before_mario_update(m)
 
     if emoteMenu.open then
         local numEmotes = #emoteMenu.availableEmotes
-        if c.stickMag > 0.25 then
-            emoteMenu.cursorAngle = wrapf(atan(c.stickX, -c.stickY), PI_2)
-            --_G.quick_debug_log('stick', emoteMenu.cursorAngle)
-            emoteMenu.selected = wrap(round((emoteMenu.cursorAngle / PI_2) * numEmotes), numEmotes)
-            c.stickMag = 0.0
-        end
+        if numEmotes > 0 then
+            if c.stickMag > 0.25 then
+                emoteMenu.cursorAngle = wrapf(atan(c.stickX, -c.stickY), PI_2)
+                emoteMenu.selected = wrap(round((emoteMenu.cursorAngle / PI_2) * numEmotes), numEmotes)
+            end
 
-        if c.buttonPressed & A_BUTTON ~= 0 and numEmotes > 0 then
-            play_emote(m, emoteMenu.availableEmotes[emoteMenu.selected])
-            emoteMenu.open = false
+            if c.buttonPressed & A_BUTTON ~= 0 then
+                play_emote(m, emoteMenu.availableEmotes[emoteMenu.selected])
+                emoteMenu.open = false
+            end
         end
         if c.buttonPressed & B_BUTTON ~= 0 then
             emoteMenu.open = false
         end
 
+        c.stickMag = 0.0
         c.buttonPressed = 0
         return
     end
@@ -162,6 +163,12 @@ local function on_hud_render()
     djui_hud_set_color(0xFF, 0xFF, 0xFF, 0xFF)
     djui_hud_render_texture(TEX_WHEEL_SIMPLE, w - 256, h - 256, 2.0, 2.0)
 
+    if numEmotes == 0 then
+        local text = "No Emotes!"
+        djui_hud_print_text(text, w - djui_hud_measure_text(text) * 2.0, h - 32, 4.0)
+        return
+    end
+
     local curAngle = angleDiff
     for i = 1, numEmotes do
         local emote = emoteTable[emoteMenu.availableEmotes[i]]
@@ -177,7 +184,7 @@ local function on_hud_render()
     end
     djui_hud_set_color(0xFF, 0xFF, 0xFF, 0xFF)
 
-    
+
 
     local selectedName = emoteTable[emoteMenu.availableEmotes[emoteMenu.selected]].name
     djui_hud_print_text(selectedName, w - djui_hud_measure_text(selectedName), h - 16, 2.0)

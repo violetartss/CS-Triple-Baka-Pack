@@ -229,6 +229,7 @@ local EYETABLE_TETO = {
 local ANIMTABLE_TETO = {
     [CHAR_ANIM_CREDITS_TAKE_OFF_CAP] = 'MikuCreditsHat1',
     [CHAR_ANIM_CREDITS_LOOK_UP] = 'MikuCreditsHat2',
+    [CHAR_ANIM_DYING_FALL_OVER] = 'TetoOhhhhhh', -- OHHHHHHHHHHHHHHHHH MY
     [_G.charSelect.CS_ANIM_MENU] = 'TetoCS',
 }
 
@@ -1007,11 +1008,48 @@ local function on_character_select_load()
 
     --
 
-    add_emote('MikuCS', "Leek Spin", TEX_MIKU_ICON, nil, { CT_MIKU })
-    add_emote('MikuCS', "Leek Spin 2", nil, nil, { CT_MIKU })
-    add_emote('MikuCS', "Leek Spin 3", nil, nil, { CT_MIKU })
-    --add_emote('MikuCS', "Leek Spin 4", nil, nil, { CT_MIKU })
-    --add_emote('MikuCS', "Leek Spin 5", nil, nil, { CT_MIKU })
+    add_emote('MikuCS', "Leek Spin", TEX_MIKU_ICON, nil, { CT_MIKU }, function(m, curFrame)
+        m.marioBodyState.handState = MARIO_HAND_PEACE_SIGN
+        m.marioBodyState.eyeState = MARIO_EYES_CLOSED
+
+        --if curFrame == 6 or curFrame == 20 then
+            --play_sound_with_freq_scale(SOUND_GENERAL_SWISH_AIR_2, m.marioObj.header.gfx.cameraToObject, 2.0)
+        --end
+    end)
+    add_emote('TetoCS', "teto_movin.mp4", TEX_TETO_ICON, nil, { CT_TETO }, function (m, curFrame)
+        m.marioBodyState.eyeState = (math.s16(gLakituState.yaw - m.faceAngle.y) > 0) and MARIO_EYES_LOOK_RIGHT or MARIO_EYES_LOOK_LEFT
+    end)
+    add_emote('NeruCS', "Always Texting...", TEX_NERU_ICON, nil, { CT_NERU }, function (m, curFrame)
+        m.marioBodyState.handState = MARIO_HAND_PEACE_SIGN
+        m.marioBodyState.eyeState = MARIO_EYES_LOOK_DOWN
+    end)
+
+    local emoteHandState = MARIO_HAND_FISTS
+    local emoteEyeState = MARIO_EYES_BLINK
+
+    local HANDS_BIRDBRAIN = {
+        [1] = MARIO_HAND_OPEN,
+        [50] = MARIO_HAND_FISTS,
+        [90] = MARIO_HAND_RIGHT_OPEN,
+        [110] = MARIO_HAND_OPEN,
+        [150] = MARIO_HAND_FISTS,
+        [295] = MARIO_HAND_RIGHT_OPEN,
+        [360] = MARIO_HAND_FISTS,
+    }
+    local EYES_BIRDBRAIN = {
+        [1] = MARIO_EYES_BLINK,
+        [28] = MARIO_EYES_LOOK_RIGHT,
+        [38] = MARIO_EYES_LOOK_LEFT,
+        [50] = MARIO_EYES_BLINK,
+        [160] = MARIO_EYES_LOOK_DOWN,
+        [250] = MARIO_EYES_BLINK,
+    }
+    add_emote('e_birdbrain', "Birdbrain", nil, nil, { CT_TETO }, function (m, curFrame)
+        emoteHandState = HANDS_BIRDBRAIN[curFrame] or emoteHandState
+        emoteEyeState = EYES_BIRDBRAIN[curFrame] or emoteEyeState
+        m.marioBodyState.handState = emoteHandState
+        m.marioBodyState.eyeState = emoteEyeState
+    end)
 
     enable_custom_animations()
 
