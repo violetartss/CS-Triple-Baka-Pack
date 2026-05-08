@@ -26,11 +26,27 @@ local function wrapf(n, range)
     return n
 end
 
+---@class EmoteAudio
+---@field filename? string
+---@field stream? ModAudio
+---@field looping? boolean
+---@field startTime? number
+---@field loopStart? integer
+---@field loopEnd? integer
+
+---@class EmoteStateTable
+---@field hands? table<integer,MarioHandGSCId|integer>
+---@field eyes? table<integer,MarioEyesGSCId|integer>
+---@field cap? table<integer,MarioCapGSCId|integer>
+
 ---@class Emote
 ---@field anim string
 ---@field name string
 ---@field icon? TextureInfo
----@field audio? ModAudio
+---@field audio? EmoteAudio
+---@field hands? table<integer,MarioHandGSCId|integer>
+---@field eyes? table<integer,MarioEyesGSCId|integer>
+---@field cap? table<integer,MarioCapGSCId|integer>
 ---@field characters? table<integer,boolean>
 ---@field func? fun(m:MarioState,curFrame:integer)
 
@@ -50,11 +66,29 @@ local TEX_WHEEL_SIMPLE = get_texture_info('emote_wheel_simple')
 ---@param luaAnimId string
 ---@param name? string
 ---@param icon? TextureInfo
----@param audio? ModAudio
+---@param audio? string|EmoteAudio Audio stream filename to play with the emote (`"audio.ogg"`)
+---@param stateTable? EmoteStateTable A collection of tables with keyframed state swaps for `hands`, `eyes`, and `cap`. e.g. `{ hands = { [frame#] = MARIO_HANDS_... , } }`
 ---@param characterNums? integer|integer[]
----@param loopFunc? fun(m:MarioState,curFrame:integer) Function called every frame while the emote is playing. Passes the player's state `m` and `animFrame` as parameters. Return `true` to intercept the stationary ground step and cancels.
-function add_emote(luaAnimId, name, icon, audio, characterNums, loopFunc)
-    local emoteEntry = { anim = luaAnimId, name = name or luaAnimId, icon = icon, audio = audio, func = loopFunc }
+---@param loopFunc? fun(m:MarioState,curFrame:integer):any Function called every frame while the emote is playing. Passes the player's state `m` and `animFrame` as parameters. Return `true` to intercept the stationary ground step and cancels.
+function add_emote(luaAnimId, name, icon, audio, stateTable, characterNums, loopFunc)
+    local emoteEntry = { anim = luaAnimId, name = name or luaAnimId, icon = icon, func = loopFunc }
+
+    if audio then
+        if type(audio) == "string" then
+            emoteEntry.audio = { stream = audio_stream_load(audio) }
+        elseif type(audio) == "table" then
+            audio.stream = audio_stream_load(audio.filename)
+            audio.filename = nil
+
+            emoteEntry.audio = audio
+        end
+    end
+
+    if stateTable then
+        emoteEntry.hands = stateTable.hands
+        emoteEntry.eyes = stateTable.eyes
+        emoteEntry.cap = stateTable.cap
+    end
     if characterNums then
         if type(characterNums) ~= "table" then
             emoteEntry.characters = { [characterNums] = true }
@@ -67,19 +101,41 @@ function add_emote(luaAnimId, name, icon, audio, characterNums, loopFunc)
     end
 
     table_insert(emoteTable, emoteEntry)
+
+    return emoteEntry
+end
+
+local playerEmoteStates = {}
+for i = 0, MAX_PLAYERS - 1 do
+    playerEmoteStates[i] = { hands = 0, eyes = 0, cap = 0 }
 end
 
 local ACT_EMOTING = allocate_mario_action(ACT_GROUP_CUTSCENE)
 
 ---@param m MarioState
 local function act_emoting(m)
-    local emote = emoteTable[gPlayerSyncTable[m.playerIndex].playingEmote]
+    local e = emoteTable[gPlayerSyncTable[m.playerIndex].playingEmote]
 
     set_character_animation(m, -1)
-    smlua_anim_util_set_animation(m.marioObj, emote.anim)
+    smlua_anim_util_set_animation(m.marioObj, e.anim)
     local animInfo = m.marioObj.header.gfx.animInfo
+    local frame = animInfo.animFrame
+    local s = playerEmoteStates[m.playerIndex]
 
-    if emote.func then if emote.func(m, animInfo.animFrame) then return end end
+    if e.hands then
+        s.hands = e.hands[frame] or s.hands
+        m.marioBodyState.handState = s.hands
+    end
+    if e.eyes then
+        s.eyes = e.eyes[frame] or s.eyes
+        m.marioBodyState.eyeState = s.eyes
+    end
+    if e.cap and m.flags & MARIO_NORMAL_CAP ~= 0 then
+        s.cap = e.cap[frame] or s.cap
+        m.marioBodyState.capState = s.cap
+    end
+
+    if e.func then if e.func(m, frame) then return end end
 
     m.input = m.input & ~INPUT_NONZERO_ANALOG
     if check_common_idle_cancels(m) ~= 0 then
@@ -95,11 +151,32 @@ end
 hook_mario_action(ACT_EMOTING, act_emoting)
 
 ---@param m MarioState
+local function on_set_action(m)
+    if m.prevAction == ACT_EMOTING then
+        local e = emoteTable[gPlayerSyncTable[m.playerIndex].playingEmote]
+        if e.audio then
+            audio_stream_stop(e.audio.stream)
+        end
+    end
+end
+hook_event(HOOK_ON_SET_MARIO_ACTION, on_set_action)
+
+---@param m MarioState
 function play_emote(m, emoteIndex)
     if not emoteIndex or emoteIndex <= 0 then return end
 
     gPlayerSyncTable[m.playerIndex].playingEmote = emoteIndex
     drop_and_set_mario_action(m, ACT_EMOTING, 0)
+
+    local audio = emoteTable[emoteIndex].audio
+    if audio then
+        audio_stream_play(audio.stream, true, 1.0)
+        audio_stream_set_position(audio.stream, audio.startTime or 0.0)
+        audio_stream_set_looping(audio.stream, audio.looping or true)
+        if audio.loopStart and audio.loopEnd then
+            audio_stream_set_loop_points(audio.stream, audio.loopStart, audio.loopEnd)
+        end
+    end
 end
 
 ---@param m MarioState

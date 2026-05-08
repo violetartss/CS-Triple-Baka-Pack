@@ -1008,50 +1008,71 @@ local function on_character_select_load()
 
     --
 
-    add_emote('MikuCS', "Leek Spin", TEX_MIKU_ICON, nil, { CT_MIKU }, function(m, curFrame)
-        m.marioBodyState.handState = MARIO_HAND_PEACE_SIGN
-        m.marioBodyState.eyeState = MARIO_EYES_CLOSED
+    add_emote('MikuCS', "Leek Spin", TEX_MIKU_ICON, nil,
+        { hands = { MARIO_HAND_PEACE_SIGN }, eyes = { MARIO_EYES_LOOK_DOWN } },
+        { CT_MIKU })
+    add_emote('TetoCS', "teto_movin.mp4", TEX_TETO_ICON, nil, nil,
+        { CT_TETO },
+        function(m, curFrame)
+            m.marioBodyState.eyeState = (math.s16(gLakituState.yaw - m.faceAngle.y) > 0) and MARIO_EYES_LOOK_RIGHT or
+                MARIO_EYES_LOOK_LEFT
+        end)
+    add_emote('NeruCS', "Always Texting...", TEX_NERU_ICON, nil,
+        { hands = { MARIO_HAND_PEACE_SIGN }, eyes = { MARIO_EYES_LOOK_DOWN } },
+        { CT_NERU })
 
-        --if curFrame == 6 or curFrame == 20 then
-            --play_sound_with_freq_scale(SOUND_GENERAL_SWISH_AIR_2, m.marioObj.header.gfx.cameraToObject, 2.0)
-        --end
-    end)
-    add_emote('TetoCS', "teto_movin.mp4", TEX_TETO_ICON, nil, { CT_TETO }, function (m, curFrame)
-        m.marioBodyState.eyeState = (math.s16(gLakituState.yaw - m.faceAngle.y) > 0) and MARIO_EYES_LOOK_RIGHT or MARIO_EYES_LOOK_LEFT
-    end)
-    add_emote('NeruCS', "Always Texting...", TEX_NERU_ICON, nil, { CT_NERU }, function (m, curFrame)
-        m.marioBodyState.handState = MARIO_HAND_PEACE_SIGN
-        m.marioBodyState.eyeState = MARIO_EYES_LOOK_DOWN
-    end)
 
-    local emoteHandState = MARIO_HAND_FISTS
-    local emoteEyeState = MARIO_EYES_BLINK
-
-    local HANDS_BIRDBRAIN = {
-        [1] = MARIO_HAND_OPEN,
-        [50] = MARIO_HAND_FISTS,
-        [90] = MARIO_HAND_RIGHT_OPEN,
-        [110] = MARIO_HAND_OPEN,
-        [150] = MARIO_HAND_FISTS,
-        [295] = MARIO_HAND_RIGHT_OPEN,
-        [360] = MARIO_HAND_FISTS,
+    local STATES_BIRDBRAIN = {
+        --[[
+        hands = {
+            [1] = MARIO_HAND_OPEN,
+            [50] = MARIO_HAND_FISTS,
+            [110] = MARIO_HAND_RIGHT_OPEN,
+            [130] = MARIO_HAND_OPEN,
+            [185] = MARIO_HAND_FISTS,
+            [375] = MARIO_HAND_RIGHT_OPEN,
+            [445] = MARIO_HAND_FISTS,
+        },
+        ]]
+        eyes = {
+            [1] = MARIO_EYES_BLINK,
+            [28] = MARIO_EYES_LOOK_RIGHT,
+            [38] = MARIO_EYES_LOOK_LEFT,
+            [50] = MARIO_EYES_BLINK,
+            [230] = 12,
+            [250] = MARIO_EYES_LOOK_DOWN,
+            [285] = MARIO_EYES_BLINK,
+            [335] = MARIO_EYES_LOOK_UP,
+            [375] = MARIO_EYES_BLINK,
+            [465] = MARIO_EYES_CLOSED,
+            [470] = MARIO_EYES_DEAD,
+            [480] = MARIO_EYES_BLINK,
+            [550] = 12,
+            [570] = MARIO_EYES_LOOK_DOWN,
+            [800] = MARIO_EYES_CLOSED,
+            [815] = MARIO_EYES_BLINK,
+        }
     }
-    local EYES_BIRDBRAIN = {
-        [1] = MARIO_EYES_BLINK,
-        [28] = MARIO_EYES_LOOK_RIGHT,
-        [38] = MARIO_EYES_LOOK_LEFT,
-        [50] = MARIO_EYES_BLINK,
-        [200] = 12,
-        [215] = MARIO_EYES_BLINK,
-        [395] = MARIO_EYES_CLOSED,
-        [410] = MARIO_EYES_BLINK,
-    }
-    add_emote('e_birdbrain', "Birdbrain", nil, nil, { CT_TETO }, function (m, curFrame)
-        emoteHandState = HANDS_BIRDBRAIN[curFrame] or emoteHandState
-        emoteEyeState = EYES_BIRDBRAIN[curFrame] or emoteEyeState
-        m.marioBodyState.handState = emoteHandState
-        m.marioBodyState.eyeState = emoteEyeState
-    end)
+    add_emote('e_birdbrain', "Birdbrain", nil,
+        { filename = "EmoteBirdbrain.ogg", startTime = 28.625 },
+        STATES_BIRDBRAIN,
+        { CT_TETO },
+        function(m, curFrame)
+            m.marioObj.header.gfx.animInfo.animAccel = 0xE38E -- magic number for 1/1.125
+
+            if m.playerIndex == 0 and curFrame == 810 then
+                if math.random() < 0.1 then
+                    m.faceAngle.y = m.faceAngle.y + 0x8000
+                    return set_mario_action(m, ACT_BACKWARD_GROUND_KB, 0)
+                    -- oof
+                end
+            end
+            if curFrame == 839 then
+                m.faceAngle.y = m.faceAngle.y + 0x8000
+                set_anim_to_frame(m, 4)
+            end
+            
+        end)
 
     enable_custom_animations()
 
