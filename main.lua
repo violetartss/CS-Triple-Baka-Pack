@@ -1022,6 +1022,55 @@ local function on_character_select_load()
         { CT_NERU })
 
 
+    local E_MODEL_MIKU_BEAM = smlua_model_util_get_id("miku_beam_geo")
+    local STATES_MIKUMIKUBEAM = {
+        eyes = {
+            [1] = 9,
+            [10] = MARIO_EYES_OPEN,
+            [38] = 9,
+            [50] = MARIO_EYES_OPEN,
+            [78] = 9,
+            [98] = MARIO_EYES_OPEN,
+            [130] = 9,
+            [150] = 10
+        }
+    }
+    add_emote('e_mikumikubeam', "Miku Miku Beam!", nil,
+        { filename = 'EmoteMikuBeam.ogg', looping = false },
+        STATES_MIKUMIKUBEAM, { CT_MIKU }, function(m, curFrame)
+            local p = gPlayerSyncTable[m.playerIndex]
+            if curFrame == 1 then
+                p.beamYaw = 0
+                p.beamPitch = 0
+            end
+            if curFrame > 150 then
+                p.beamYaw = approach_s16_asymptotic(p.beamYaw, -m.controller.stickX * 128, 32)
+                p.beamPitch = approach_s16_asymptotic(p.beamPitch, m.controller.stickY * 64, 32)
+
+                local body = m.marioBodyState
+                body.allowPartRotation = 1
+                body.headAngle.y = p.beamYaw
+                body.headAngle.x = p.beamPitch
+
+                --spawn beam
+                if m.playerIndex == 0 and m.actionTimer == 0 then
+                    local yaw = m.faceAngle.y + p.beamYaw
+                    local pitch = p.beamPitch
+
+                    spawn_sync_object(id_bhvMikuBeam, E_MODEL_MIKU_BEAM, m.pos.x, m.pos.y + 120, m.pos.z, function(o)
+                        o.globalPlayerIndex = m.marioObj.globalPlayerIndex
+                        o.oMoveAngleYaw = yaw
+                        o.oMoveAnglePitch = pitch
+                    end)
+                end
+
+                m.actionTimer = m.actionTimer + 1
+                if m.actionTimer >= 150 then
+                    set_mario_action(m, ACT_FREEFALL_LAND_STOP, 0)
+                end
+            end
+        end)
+
     local STATES_BIRDBRAIN = {
         --[[
         hands = {
@@ -1063,7 +1112,7 @@ local function on_character_select_load()
             if m.playerIndex == 0 and curFrame == 810 then
                 if math.random() < 0.1 then
                     m.faceAngle.y = m.faceAngle.y + 0x8000
-                    return set_mario_action(m, ACT_BACKWARD_GROUND_KB, 0)
+                    set_mario_action(m, ACT_BACKWARD_GROUND_KB, 0)
                     -- oof
                 end
             end
@@ -1071,7 +1120,6 @@ local function on_character_select_load()
                 m.faceAngle.y = m.faceAngle.y + 0x8000
                 set_anim_to_frame(m, 4)
             end
-            
         end)
 
     enable_custom_animations()

@@ -110,7 +110,7 @@ for i = 0, MAX_PLAYERS - 1 do
     playerEmoteStates[i] = { hands = 0, eyes = 0, cap = 0 }
 end
 
-local ACT_EMOTING = allocate_mario_action(ACT_GROUP_CUTSCENE)
+ACT_EMOTING = allocate_mario_action(ACT_GROUP_CUTSCENE)
 
 ---@param m MarioState
 local function act_emoting(m)
@@ -142,10 +142,13 @@ local function act_emoting(m)
         return 1
     end
 
-    stationary_ground_step(m)
+    local step = stationary_ground_step(m)
 
     if animInfo.curAnim.flags & ANIM_FLAG_NOLOOP ~= 0 and is_anim_at_end(m) ~= 0 then
         set_mario_action(m, ACT_IDLE, 0)
+    end
+    if step == GROUND_STEP_LEFT_GROUND then
+        set_mario_action(m, ACT_FREEFALL, 0)
     end
 end
 hook_mario_action(ACT_EMOTING, act_emoting)
@@ -157,6 +160,7 @@ local function on_set_action(m)
         if e.audio then
             audio_stream_stop(e.audio.stream)
         end
+        m.marioBodyState.allowPartRotation = 0
     end
 end
 hook_event(HOOK_ON_SET_MARIO_ACTION, on_set_action)
@@ -172,7 +176,9 @@ function play_emote(m, emoteIndex)
     if audio then
         audio_stream_play(audio.stream, true, 1.0)
         audio_stream_set_position(audio.stream, audio.startTime or 0.0)
-        audio_stream_set_looping(audio.stream, audio.looping or true)
+        if audio.looping ~= nil then
+            audio_stream_set_looping(audio.stream, audio.looping)
+        end
         if audio.loopStart and audio.loopEnd then
             audio_stream_set_loop_points(audio.stream, audio.loopStart, audio.loopEnd)
         end
